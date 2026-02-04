@@ -43,7 +43,7 @@ A custom-styled dark theme map featuring the parking zone data. This layer uses 
 ![Tileset 1 - Basemap](screenshots/tileset1.png)
 
 ### Parking Zones Only
-![Tileset 2 - Thematic](screenshots/tileset2.png)
+![Tileset 2 - RPZ](screenshots/tileset2.png)
 
 ### Combined View
 ![Tileset 3 - Combined](screenshots/tileset3.png)
