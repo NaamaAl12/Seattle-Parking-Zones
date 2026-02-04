@@ -1,6 +1,5 @@
-# **Seattle Restricted Parking Zones Web Map**
+# **GEOG 458 - Lab 4 | Seattle Restricted Parking Zones Web Map**
 
-# GEOG 458 Lab 4 | Web Mapping Tile Sets
 
 ## Live Map
 
