@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Seattle Restricted Parking Zones | GEOG 458 Lab 4</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.js"></script>
+    <style>
+        body { 
+            margin: 0; 
+            padding: 0; 
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+        }
+        #map { 
+            position: absolute; 
+            top: 0; 
+            bottom: 0; 
+            width: 100%; 
+        }
+        
+        /* Map title */
+        #title {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+            max-width: 320px;
+            z-index: 1;
+        }
+        #title h1 {
+            margin: 0 0 8px 0;
+            font-size: 20px;
+            color: #4b2e83;
+        }
+        #title p {
+            margin: 0;
+            font-size: 13px;
+            color: #555;
+            line-height: 1.5;
+        }
+        
+        /* Layer switcher */
+        #menu {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+            z-index: 1;
+        }
+        #menu h3 {
+            margin: 0 0 12px 0;
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+            border-bottom: 2px solid #4b2e83;
+            padding-bottom: 8px;
+        }
+        #menu label {
+            display: block;
+            cursor: pointer;
+            padding: 8px 10px;
+            margin: 4px 0;
+            border-radius: 4px;
+            transition: background-color 0.2s;
+            font-size: 13px;
+        }
+        #menu label:hover {
+            background-color: #f0f0f0;
+        }
+        #menu input[type="radio"] {
+            margin-right: 8px;
+        }
+        
+        /* Map description */
+        #description {
+            position: absolute;
+            bottom: 35px;
+            left: 15px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 12px 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+            max-width: 280px;
+            font-size: 12px;
+            color: #555;
+            z-index: 1;
+        }
+        #description strong {
+            color: #4b2e83;
+        }
+
+        /* Attribution styling */
+        .mapboxgl-ctrl-attrib {
+            font-size: 11px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="map"></div>
+
+<div id="title">
+    <h1>Seattle Restricted Parking Zones</h1>
+    <p>Exploring Seattle's Restricted Parking Zone (RPZ) areas through different map visualizations. Data from Seattle GeoData.</p>
+</div>
+
+<nav id="menu">
+    <h3>Map Layers</h3>
+    <label>
+        <input type="radio" name="layer" value="basemap" checked>
+        Monochrome Basemap
+    </label>
+    <label>
+        <input type="radio" name="layer" value="thematic">
+        Parking Zones Only
+    </label>
+    <label>
+        <input type="radio" name="layer" value="combined">
+        Basemap + Parking Zones
+    </label>
+    <label>
+        <input type="radio" name="layer" value="dark-theme">
+        Dark Theme
+    </label>
+</nav>
+
+<div id="description">
+    <strong>About this map:</strong> Seattle's RPZ program manages parking in residential areas near high-traffic destinations. Switch between layers to explore different map styles.
+</div>
+
+<script>
+    mapboxgl.accessToken = 'pk.eyJ1IjoibmFsMTIiLCJhIjoiY21reXBkYmxtMDltbDNyb2NmcjZpaDdvdiJ9.ZX7GLNtaTYyTjLOhx4ITqg';
+    
+    // Initialize the map
+    const map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/nal12/cml7vgkv4004201sq65v01olg',
+        center: [-122.33, 47.60], 
+        zoom: 11,
+        minZoom: 11,
+        maxZoom: 15
+    });
+
+    map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
+    
+    map.addControl(new mapboxgl.ScaleControl({
+        maxWidth: 100,
+        unit: 'imperial'
+    }), 'bottom-right');
+
+    map.addControl(new mapboxgl.FullscreenControl(), 'bottom-right');
+
+    map.on('load', () => {
+        
+        // TILESET 1: Monochrome Basemap
+        map.addSource('basemap-tiles', {
+            type: 'raster',
+            tiles: ['./assets/tileset_1/basemap/{z}/{x}/{y}.png'],
+            tileSize: 256,
+            attribution: 'Basemap © Mapbox | Tiles by NaamaAl12'
+        });
+        map.addLayer({
+            id: 'basemap',
+            type: 'raster',
+            source: 'basemap-tiles',
+            layout: { visibility: 'visible' }
+        });
+
+        // TILESET 2: Thematic Layer (Parking Zones Only)
+        map.addSource('thematic-tiles', {
+            type: 'raster',
+            tiles: ['./assets/tileset_2/Restricted Parking Zone Areas/{z}/{x}/{y}.png'],
+            tileSize: 256,
+            attribution: 'Parking Zone Data © Seattle GeoData'
+        });
+        map.addLayer({
+            id: 'thematic',
+            type: 'raster',
+            source: 'thematic-tiles',
+            layout: { visibility: 'none' }
+        });
+
+        // TILESET 3: Combined (Basemap + Parking Zones)
+        map.addSource('combined-tiles', {
+            type: 'raster',
+            tiles: ['./assets/tileset_3/Combined/{z}/{x}/{y}.png'],
+            tileSize: 256,
+            attribution: 'Basemap © Mapbox | Parking Data © Seattle GeoData'
+        });
+        map.addLayer({
+            id: 'combined',
+            type: 'raster',
+            source: 'combined-tiles',
+            layout: { visibility: 'none' }
+        });
+
+        // TILESET 4: Dark Theme
+        map.addSource('dark-theme-tiles', {
+            type: 'raster',
+            tiles: ['./assets/tileset_4/Dark Theme/{z}/{x}/{y}.png'],
+            tileSize: 256,
+            attribution: 'Dark Theme © Mapbox'
+        });
+        map.addLayer({
+            id: 'dark-theme',
+            type: 'raster',
+            source: 'dark-theme-tiles',
+            layout: { visibility: 'none' }
+        });
+    });
+
+    // Layer switcher functionality
+    const layerIds = ['basemap', 'thematic', 'combined', 'dark-theme'];
+    const radios = document.querySelectorAll('input[name="layer"]');
+    
+    radios.forEach(radio => {
+        radio.addEventListener('change', (e) => {
+            const selectedLayer = e.target.value;
+            layerIds.forEach(layerId => {
+                if (layerId === selectedLayer) {
+                    map.setLayoutProperty(layerId, 'visibility', 'visible');
+                } else {
+                    map.setLayoutProperty(layerId, 'visibility', 'none');
+                }
+            });
+        });
+    });
+</script>
+
+</body>
+</html>
