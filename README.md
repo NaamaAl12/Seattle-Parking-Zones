@@ -4,7 +4,7 @@
 
 ## Live Map
 
-[View the Web Map](https://naamaal12.github.io/seattle-parking-zones/)
+[View the Web Map](https://naamaal12.github.io/Seattle-Parking-Zones/)
 
 ## Project Overview
 
@@ -32,8 +32,8 @@ A combined visualization layering the RPZ thematic data over the monochrome base
 
 - Zoom Levels: 11 - 15
 
-### Tileset 4: Dark Theme (UW Style)
-A custom-styled dark theme map featuring the parking zone data. This layer uses a dark color palette inspired by the University of Washington, demonstrating how map themes can be customized for different audiences or purposes.
+### Tileset 4: Dark Theme
+A custom-styled dark theme map featuring the parking zone data. This layer uses a dark color palette demonstrating how map themes can be customized for different audiences or purposes.
 
 - Zoom Levels: 11 - 15
 
@@ -72,4 +72,4 @@ A custom-styled dark theme map featuring the parking zone data. This layer uses 
 
 ## Author
 
-Naama Al | University of Washington | GEOG 458 Winter 2026
+Naama Al-Musawi | University of Washington | GEOG 458 Winter 2026
